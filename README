@@ -1,0 +1,36 @@
+Captcha module for nginx
+
+这是一个nginx模块，使用MagickWand c API生成动态小图片（比如验证码），结合预生成算法，提供最高效的响应服务。
+
+
+Install
+	Compile nginx with this ./configure option:
+
+    --add-module=path/to/this/directory
+
+	***You must have the ImageMagick development headers for it to work.
+
+
+Config
+	location /captcha {
+		captcha 100;					# captcha on, and pre build 100 captcha images
+		captcha_cookie_secret "xxx";	# priv key
+		# captcha_width 120;				
+		# captcha_height 45;
+		# captcha_char_count 4;
+		# captcha_char_spacing -3;		# space between every two chars
+		# captcha_font_size 26;			
+		# captcha_font "/usr/share/fonts/TTF/FreeMonoBold.ttf";
+		# captcha_cookie_hash_name "captcha_h";
+		# captcha_cookie_salt_name "captcha_s";
+	}
+	
+	the captcha will be accessible like this:
+
+    http://host/captcha/
+
+Serverside Check:
+	if (md5($secret. strtolower($user_input_captcha). $salt_from_cookie) == $hash_from_cookie) {
+		echo "ok";
+	}
+
